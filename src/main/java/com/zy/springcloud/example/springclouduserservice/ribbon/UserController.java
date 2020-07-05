@@ -3,6 +3,7 @@ package com.zy.springcloud.example.springclouduserservice.ribbon;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +34,10 @@ public class UserController {
 
     /**
      * 向容器中注入该组件bean
+     * 添加@LoadBalanced注解，不在需要显式的注入LoadBalancerClient
      * @return
      */
+    @LoadBalanced
     @Bean
     public RestTemplate restTemplate(){
         return new RestTemplate();
@@ -58,5 +61,18 @@ public class UserController {
 
         //网络请求，相比httpClient等简化 http请求步骤，已封装在内
         return restTemplate.getForObject(url,String.class);
+    }
+
+
+    /**
+     * web请求,直接使用@LoadBalanced注解，查看请求结果
+     * @param id
+     * @return
+     */
+    @GetMapping("/user/annocation/{id}")
+    public Object findByIdByLoadBancedAnnocation(@PathVariable("id") int id){
+
+        //使用增加了@LoadBanlanced注解的restTemplate，url 直接使用提供者服务的id加path，返回对象类型
+        return restTemplate.getForObject("http://spring-cloud-order-service/orders",String.class);
     }
 }

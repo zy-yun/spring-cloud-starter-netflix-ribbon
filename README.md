@@ -41,3 +41,8 @@ Ribbon的LoadBalancerClient负载均衡客户端组件，依赖netflix-ribbon ja
 即 两个应用。
 然后浏览器地址端输入：http://localhost:8080/user/1
 查看返回结果：会发现robbin默认的使用的负载策略为轮询，8081/8082循环依次访问
+
+
+2020/07/05 15：09 版本：
+1.增加@LoadBalanced注解，取消@AutoWried显式注入LoadBalancerClient负载均衡客户端组件
+2.直接使用restTemplate..getForObject("http://spring-cloud-order-service/orders",String.class),url直接传提供者服务的id跟path
